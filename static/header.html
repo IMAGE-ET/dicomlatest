@@ -1,0 +1,71 @@
+<html >
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>	
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-resource.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-route.js"></script>
+		<script src="/static/js/script.js"></script>
+		<style>
+		[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+		  display: none !important;
+		}
+		</style>
+	</head>
+	<body ng-app="dicomApp">
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#"> <img
+						style="max-width: 100px; margin-top: -7px;"
+						src="/static/AssureNET_Logo.jpg"> <img
+						style="max-width: 100px; margin-top: -7px;"
+						src="/static/kcclogo.png">
+					</a>
+				</div>
+			</div>
+		</nav>
+		<ul class="nav nav-tabs" style="margin-left: 10%;">
+			<li role="presentation"><a href="/static/header.html">Home</a></li>
+		</ul>
+		<div ng-controller="DicomController">
+			<div class="container">
+				<form action="/api/upload_form_serializer/" enctype="multipart/form-data" method="post">
+					<input type="file" name="file">
+					<button class="btn btn-default">Upload</button>
+				</form>
+			</div>
+			<div class="container">
+				<form class="form-inline">
+					<select class="form-control" ng-model="querykey">
+						<option ng-repeat="option in propkeys" value="{{option.prop_key}}" >{{option.prop_key}}</option>
+					</select>
+					<input type="text" class="form-control" ng-model="queryvalue"  placeholder="value"/>
+					<button ng-click="search()" class="btn btn-default">Search</button>
+				</form>
+			</div>
+			<div style="margin-bottom:30px;"/>
+			<div class="container">
+				<table class="table table-bordered">
+					<thead>
+						<th>Doc Id</th>
+						<th>Name</th>
+						<th>Date Created</th>
+						<th>View Details</th>
+						<th>Download</th>
+					</thead>
+					<tbody>
+						<tr ng-repeat="dicom in dicoms" ng-cloak>
+							<td>{{dicom.doc_id}}</td>
+							<td>{{dicom.doc_file | filename}}</td>
+							<td>{{dicom.date_time | date:'yyyy-MM-dd'}}</td>
+							<td><a href="dicom.html?doc_id={{dicom.doc_id}}">View Details</a></td>
+							<td><a href="{{dicom.doc_file}}">Download</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,197 @@
+<html >
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>	
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-resource.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-route.js"></script>
+		<meta charset="utf-8">
+		<title>DICOM Web Viewer</title>
+		<meta charset="UTF-8">
+		<meta name="description" content="DICOM Web Viewer (DWV) static version">
+		<meta name="keywords"
+			content="DICOM,HTML5,JavaScript,medical,imaging,DWV">
+		<link type="text/css" rel="stylesheet" href="/static/dwv/css/style.css">
+		<style type="text/css">
+		body {
+			background-color: #222;
+			color: white;
+			margin: 10px;
+			padding: 0;
+			font-size: 80%;
+		}
+
+		#pageHeader h1 {
+			display: inline-block;
+			margin: 0;
+			color: #fff;
+		}
+
+		#pageHeader a {
+			color: #ddf;
+		}
+
+		#pageHeader #toolbar {
+			display: inline-block;
+			float: right;
+		}
+
+		#toolbox li:first-child {
+			list-style-type: none;
+			padding-bottom: 10px;
+			margin-left: -20px;
+		}
+
+		#pageMain {
+			position: absolute;
+			height: 92%;
+			width: 99%;
+			bottom: 5px;
+			left: 5px;
+			background-color: #333;
+		}
+
+		#infotl {
+			color: #333;
+			text-shadow: 0 1px 0 #fff;
+		}
+
+		#infotr {
+			color: #333;
+			text-shadow: 0 1px 0 #fff;
+		}
+
+		#dropBox {
+			margin: 20px;
+		}
+		[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+		  display: none !important;
+		}
+		</style>
+		<link type="text/css" rel="stylesheet"
+			href="/static/dwv/ext/jquery-ui/themes/ui-darkness/jquery-ui-1.11.2.min.css">
+		<link type="text/css" rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<!-- Third party -->
+		<script type="text/javascript"
+			src="/static/dwv/ext/jquery/jquery-2.1.4.min.js"></script>
+		<script type="text/javascript"
+			src="/static/dwv/ext/jquery-ui/jquery-ui-1.11.2.min.js"></script>
+		<script type="text/javascript"
+			src="/static/dwv/ext/flot/jquery.flot.min.js"></script>
+		<script type="text/javascript" src="/static/dwv/ext/pdfjs/jpx.js"></script>
+		<script type="text/javascript" src="/static/dwv/ext/pdfjs/util.js"></script>
+		<script type="text/javascript"
+			src="/static/dwv/ext/pdfjs/arithmetic_decoder.js"></script>
+		<script type="text/javascript"
+			src="/static/dwv/ext/rii-mango/lossless-min.js"></script>
+		<script type="text/javascript" src="/static/dwv/ext/notmasteryet/jpg.js"></script>
+		<script type="text/javascript"
+			src="/static/dwv/ext/kinetic/kinetic-v5.1.1-06.10.min.js"></script>
+		<script type="text/javascript"
+			src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<!-- Local -->
+		<script type="text/javascript" src="/static/dwv/src/app/application.js"></script>
+		<script type="text/javascript"
+			src="/static/dwv/src/app/toolboxController.js"></script>
+		<script type="text/javascript"
+			src="/static/dwv/src/app/viewController.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/app/state.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/dicom/dicomParser.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/dicom/dictionary.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/gui/browser.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/gui/filter.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/gui/generic.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/gui/help.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/gui/html.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/gui/layer.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/gui/loader.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/gui/style.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/gui/tools.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/gui/undo.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/image/filter.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/image/geometry.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/image/image.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/image/luts.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/image/reader.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/image/view.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/io/file.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/io/url.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/math/bucketQueue.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/math/point.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/math/scissors.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/math/shapes.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/math/stats.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/tools/draw.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/tools/editor.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/tools/ellipse.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/tools/filter.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/tools/info.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/tools/line.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/tools/livewire.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/tools/protractor.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/tools/rectangle.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/tools/roi.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/tools/scroll.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/tools/toolbox.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/tools/undo.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/tools/windowLevel.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/tools/zoomPan.js"></script>
+		<script type="text/javascript" src="/static/dwv/src/utils/string.js"></script
+		<!-- Launch the app -->
+		<script type="text/javascript" src="/static/dwv/viewers/static/appgui.js"></script>
+		<script type="text/javascript"
+			src="/static/dwv/viewers/static/applauncher.js"></script>
+		<script src="/static/js/dicom.js"></script>
+	</head>
+	<body ng-app="dicomApp">
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#"> <img
+						style="max-width: 100px; margin-top: -7px;"
+						src="/static/AssureNET_Logo.jpg"> <img
+						style="max-width: 100px; margin-top: -7px;"
+						src="/static/kcclogo.png">
+					</a>
+				</div>
+			</div>
+		</nav>
+		<ul class="nav nav-tabs" style="margin-left: 10%;">
+			<li role="presentation"><a href="/static/header.html">Home</a></li>
+		</ul>
+		<div ng-controller="DicomDetailController">
+			<div class="container" ng-cloak>
+				<table class="table table-bordered">
+					<thead>
+						<th>Property</th>
+						<th>Property Value</th>
+					</thead>
+					<tbody>
+						<tr ng-repeat="prop in dicom.properties">
+							<td>{{prop.prop_key}}</td>
+							<td>{{prop.prop_value}}</td>
+						</tr>	
+					</tbody>
+				</table>
+				<input id="fileurl" hidden="hidden" value="{{dicom.doc_file}}"/>
+				<div id="dwv">
+					<canvas id="dwv-imageLayer">Only for HTML5 compatible browsers...</canvas>
+				</div>
+				<script>
+				setTimeout(function(){
+			     var app = new dwv.App();
+			     // initialise with the id of the container div
+			     app.init({
+			          "containerDivId": "dwv"
+			     });
+			            // load dicom data
+				 var url = document.getElementById("fileurl").value;
+			     app.loadURL([url]);
+				}, 3000);
+				</script>
+			</div>
+		</div>
+	</body>
+</html>
